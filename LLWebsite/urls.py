@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from lessons.views import quiz_view # Import your function
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', quiz_view, name = 'homepage'),       # Add this line
 ]

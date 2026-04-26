@@ -1,0 +1,20 @@
+<form method="POST">
+    {% csrf_token %}
+    
+    <h1>Translate: {{ display_wordA }}</h1>
+    
+    <input type="text" name="user_answer" value="{{ user_input }}" placeholder="Type translation here...">
+    <button type="submit">Submit Answer</button>
+
+    <hr>
+<p>Debug: show_feedback is {{ show_feedback }}</p>
+    {% if show_feedback %}
+        <button type="submit" name="user_choice" value="correct" style="font-size: 50px;">
+            ✅
+        </button>
+
+        <button type="submit" name="user_choice" value="wrong" style="font-size: 50px;">
+            ❌
+        </button>
+    {% endif %}
+</form>
