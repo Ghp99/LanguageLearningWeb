@@ -1,20 +1,219 @@
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=0.6, maximum-scale=1, user-scalable=0">
+    <style>
+        :root {
+            --primary-red: #d74f4f;
+            --dark-text: #2d3436;
+            --glass-white: rgba(255, 255, 255, 0.95);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .quiz-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #d74f4f 0%, #8e2424 100%);
+        }
+
+        .quiz-card {
+            background: var(--glass-white);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 500px
+        }
+
+        .Translation {
+            font-family: 'Playfair Display', serif;
+            font-size: 6.5rem;
+            color: var(--dark-text);
+            margin: 0 0 1.5rem 0;
+            letter-spacing: -1px;
+        }
+
+        .input-box {
+            width: 80%;
+            padding: 15px 20px;
+            font-size: 2.1rem;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-box:focus {
+            border-color: var(--primary-red);
+            height: 100px
+        }
+
+        .submit-btn {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            width: 150px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #b93d3d;
+            transform: translateY(-2px);
+        }
+        .skip-btn {
+            background: #b93d3d;
+            color: white;
+            border: none;
+            font-size: 1.3rem;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+             height: 70px;
+             width: 180px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .skip-btn:hover {
+            background: #b93d3d;
+            transform: translateY(-2px);
+        }
+
+        .feedback-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .correct-label {
+            font-size: 0.9rem;
+            color: #636e72;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .answer-text {
+            font-size: 1.8rem;
+            color: #2d3436;
+            margin: 10px 0;
+            display: block;
+        }
+
+        .choice-btn {
+            background: none;
+            border: none;
+            font-size: 3.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .choice-btn:hover {
+            transform: scale(1.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="quiz-wrapper">
+
+    <div class="quiz-card">
+        <form method="POST">
+            {% csrf_token %}
+            
+            <h1 class="Translation">{{ display_word }}</h1>
+            
+            {% if not show_feedback %}
+                <input type="text" id="user-input" name="user_answer" class="input-box" placeholder="" autofocus autocomplete="off">
+                <br>
+                 <button type="submit" class="skip-btn" name = 'action' value='skip'>Skip</button>
+            {% endif %}
+
+            {% if show_feedback %}
+                <div class="feedback-section">
+                    <span class="correct-label">Correct Answer</span>
+                    <strong class="answer-text">{{ correct_answer }}</strong>
+                    
+                    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 20px;">
+                        <button type="submit" name="user_choice" value="correct" class="choice-btn" title="I got it right!">
+                            ✅
+                        </button>
+                        <button type="submit" name="user_choice" value="wrong" class="choice-btn" title="I missed it">
+                            ❌
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+<script>
+    // This forces the keyboard to trigger as soon as the page loads
+    window.onload = function() {
+        const input = document.getElementById('user-input');
+        if (input) {
+            input.focus();
+            input.click(); // Some mobile browsers need a 'click' to trigger keyboard
+        }
+    };
+</script>
+</body>
+
+
+{% comment %} <style>
+.Translation {
+    font-family: 'Playfair Display', serif; /* A "captivating" font */
+    font-size: 4rem;
+    color: #000000;
+    text-align: center;
+}
+.quiz-wrapper {
+            display: flex;
+            flex-direction: column; /* Stacks items vertically */
+            justify-content: center; /* Centers vertically */
+            align-items: center;     /* Centers horizontally */
+            min-height: 100vh;      /* Full screen height */
+            background-color: #d74f4f;
+            margin: 0;
+        }
+
+</style>
+
 <form method="POST">
     {% csrf_token %}
+<body class="quiz-wrapper">
+    <h1 class= 'Translation'>{{ display_word }}</h1>
     
-    <h1>Translate: {{ display_wordA }}</h1>
-    
-    <input type="text" name="user_answer" value="{{ user_input }}" placeholder="Type translation here...">
+    <input type="text" name="user_answer" value="{{ user_answer}}" placeholder="Type translation here...">
     <button type="submit">Submit Answer</button>
-
+</body>
     <hr>
-<p>Debug: show_feedback is {{ show_feedback }}</p>
     {% if show_feedback %}
+        <h1>the correct translation is: {{correct_answer}}</h1>
         <button type="submit" name="user_choice" value="correct" style="font-size: 50px;">
             ✅
         </button>
-
         <button type="submit" name="user_choice" value="wrong" style="font-size: 50px;">
             ❌
         </button>
     {% endif %}
 </form>
+{% endcomment %}

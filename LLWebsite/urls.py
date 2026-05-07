@@ -20,5 +20,6 @@ from lessons.views import quiz_view # Import your function
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', quiz_view, name = 'homepage'),       # Add this line
+    path('', quiz_view, name = 'homepage'), 
+    path('quiz/', quiz_view, name='quiz_page'),
 ]
